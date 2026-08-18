@@ -1,0 +1,26 @@
+name: ConecteMaxTV
+options:
+  bundleIdPrefix: br.com.conectemax
+  deploymentTarget:
+    iOS: "16.0"
+settings:
+  base:
+    SWIFT_VERSION: 5.0
+targets:
+  ConecteMaxTV:
+    type: application
+    platform: iOS
+    sources: [ConecteMaxTV]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: br.com.conectemax.tv
+        INFOPLIST_FILE: ConecteMaxTV/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: "1,2"
+  ConecteMaxTVTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [ConecteMaxTVTests]
+    dependencies:
+      - target: ConecteMaxTV
+
