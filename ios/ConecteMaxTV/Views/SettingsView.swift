@@ -8,19 +8,23 @@ struct SettingsView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Text("Conecte Max TV")
-                .font(.system(size: 23, weight: .bold))
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity, minHeight: 96)
-                .background(.black)
+            BrandLogo()
+                .padding(4)
+                .frame(width: 190, height: 107)
+                .background(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .frame(maxWidth: .infinity)
+                .frame(height: 128)
+                .background(AppColors.brandNavy)
+                .background(AppColors.brandNavy.ignoresSafeArea(edges: .top))
 
             VStack(spacing: 0) {
                 Image(systemName: "person.fill")
-                    .font(.system(size: 78))
+                    .font(.system(size: 88))
                     .foregroundStyle(Color(hex: 0x969696))
-                    .frame(width: 120, height: 120)
+                    .frame(width: 126, height: 126)
                     .background(Color(hex: 0xF0F0F0), in: Circle())
-                    .overlay(Circle().stroke(AppColors.watching, lineWidth: 3))
+                    .overlay(Circle().stroke(AppColors.brandOrange, lineWidth: 3))
                 Text(profile.name)
                     .font(.system(size: 22, weight: .semibold))
                     .foregroundStyle(Color(hex: 0x161616))
@@ -41,15 +45,14 @@ struct SettingsView: View {
             .frame(maxWidth: .infinity)
 
             Divider().padding(.horizontal, 24)
-            SettingsRow(icon: "play.circle.fill", label: "Habilitar em segundo plano") {
-                Toggle("", isOn: $backgroundPlaybackEnabled).labelsHidden()
-            }
-            SettingsRow(icon: "globe", label: "Idioma") {
-                Text("Português").font(.system(size: 13)).foregroundStyle(Color(hex: 0x6B7280))
-                Image(systemName: "chevron.right")
-            }
-            SettingsRow(icon: "lock.fill", label: "Alterar senha do Controle Parental") {
-                Image(systemName: "chevron.right")
+            SettingsRow(
+                icon: "play.circle.fill",
+                label: "Habilitar em segundo plano",
+                onTap: { backgroundPlaybackEnabled.toggle() }
+            ) {
+                Toggle("", isOn: $backgroundPlaybackEnabled)
+                    .labelsHidden()
+                    .allowsHitTesting(false)
             }
 
             Spacer()
@@ -79,11 +82,18 @@ struct SettingsView: View {
 private struct SettingsRow<Trailing: View>: View {
     let icon: String
     let label: String
+    let onTap: () -> Void
     let trailing: () -> Trailing
 
-    init(icon: String, label: String, @ViewBuilder trailing: @escaping () -> Trailing) {
+    init(
+        icon: String,
+        label: String,
+        onTap: @escaping () -> Void,
+        @ViewBuilder trailing: @escaping () -> Trailing
+    ) {
         self.icon = icon
         self.label = label
+        self.onTap = onTap
         self.trailing = trailing
     }
 
@@ -97,5 +107,7 @@ private struct SettingsRow<Trailing: View>: View {
         .foregroundStyle(Color(hex: 0x333333))
         .padding(.horizontal, 48)
         .frame(height: 72)
+        .contentShape(Rectangle())
+        .onTapGesture(perform: onTap)
     }
 }

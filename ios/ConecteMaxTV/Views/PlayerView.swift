@@ -3,7 +3,7 @@ import SwiftUI
 
 struct PlayerView: View {
     @Environment(\.scenePhase) private var scenePhase
-    @StateObject private var model = PlayerViewModel()
+    @ObservedObject var model: PlayerViewModel
     let streamURL: URL
     let backgroundPlaybackEnabled: Bool
     let isFullscreen: Bool
@@ -11,7 +11,10 @@ struct PlayerView: View {
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
-            PlayerController(player: model.player)
+            PlayerController(
+                player: model.player,
+                pictureInPictureEnabled: backgroundPlaybackEnabled
+            )
             Button(action: onFullscreen) {
                 Image(systemName: isFullscreen ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right")
                     .font(.system(size: 23, weight: .semibold))
@@ -37,7 +40,7 @@ struct PlayerView: View {
 }
 
 @MainActor
-private final class PlayerViewModel: ObservableObject {
+final class PlayerViewModel: ObservableObject {
     let player = AVPlayer()
     private var currentURL: URL?
 
@@ -51,7 +54,11 @@ private final class PlayerViewModel: ObservableObject {
 
     func setBackgroundPlaybackEnabled(_ enabled: Bool) {
         let session = AVAudioSession.sharedInstance()
-        try? session.setCategory(enabled ? .playback : .ambient, mode: .moviePlayback)
+        if enabled {
+            try? session.setCategory(.playback, mode: .moviePlayback)
+        } else {
+            try? session.setCategory(.ambient, mode: .default)
+        }
         try? session.setActive(true)
     }
 
@@ -63,18 +70,22 @@ private final class PlayerViewModel: ObservableObject {
 
 private struct PlayerController: UIViewControllerRepresentable {
     let player: AVPlayer
+    let pictureInPictureEnabled: Bool
 
     func makeUIViewController(context: Context) -> AVPlayerViewController {
         let controller = AVPlayerViewController()
         controller.player = player
         controller.showsPlaybackControls = false
         controller.videoGravity = .resizeAspect
-        controller.allowsPictureInPicturePlayback = false
+        controller.allowsPictureInPicturePlayback = pictureInPictureEnabled
+        controller.canStartPictureInPictureAutomaticallyFromInline = pictureInPictureEnabled
         return controller
     }
 
     func updateUIViewController(_ controller: AVPlayerViewController, context: Context) {
         controller.player = player
+        controller.allowsPictureInPicturePlayback = pictureInPictureEnabled
+        controller.canStartPictureInPictureAutomaticallyFromInline = pictureInPictureEnabled
     }
 }
 

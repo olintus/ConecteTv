@@ -18,8 +18,8 @@ struct ChannelSearchView: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 0) {
                 Button(action: onBack) {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 25, weight: .semibold))
+                    Image(systemName: "arrow.left")
+                        .font(.system(size: 30, weight: .medium))
                         .frame(width: 58, height: 58)
                 }
                 TextField("Buscar canais", text: $query)
@@ -30,7 +30,7 @@ struct ChannelSearchView: View {
                     Color.clear.frame(width: 48, height: 48)
                 } else {
                     Button { query = "" } label: {
-                        Image(systemName: "xmark.circle.fill").frame(width: 48, height: 48)
+                        Image(systemName: "xmark").frame(width: 48, height: 48)
                     }
                 }
             }
@@ -48,12 +48,13 @@ struct ChannelSearchView: View {
                 .padding(.bottom, 16)
 
             if filteredChannels.isEmpty {
-                VStack(spacing: 8) {
+                VStack(spacing: 0) {
                     Image(systemName: "magnifyingglass").font(.system(size: 42))
-                    Text("Nenhum canal encontrado").fontWeight(.semibold).padding(.top, 4)
+                    Text("Nenhum canal encontrado").fontWeight(.semibold).padding(.top, 12)
                     Text("Não encontramos resultados para “\(query)”.")
                         .font(.system(size: 13))
                         .foregroundStyle(.white.opacity(0.68))
+                        .padding(.top, 4)
                 }
                 .foregroundStyle(.white.opacity(0.75))
                 .multilineTextAlignment(.center)
@@ -61,19 +62,19 @@ struct ChannelSearchView: View {
                 .padding(24)
             } else {
                 ScrollView {
-                    LazyVStack(spacing: 8) {
+                    LazyVStack(spacing: 6) {
                         ForEach(filteredChannels) { channel in
                             Button { onSelect(channel) } label: {
-                                HStack(spacing: 28) {
-                                    ChannelLogo(channel: channel, width: 92, height: 76)
+                                HStack(spacing: 20) {
+                                    ChannelLogo(channel: channel, width: 76, height: 62)
                                     Text(channel.name)
-                                        .font(.system(size: 23, weight: .bold))
+                                        .font(.system(size: 20, weight: .bold))
                                         .foregroundStyle(.black)
                                     Spacer()
                                 }
-                                .padding(.horizontal, 28)
-                                .frame(maxWidth: .infinity, minHeight: 126)
-                                .background(.white, in: RoundedRectangle(cornerRadius: 18))
+                                .padding(.horizontal, 20)
+                                .frame(maxWidth: .infinity, minHeight: 104)
+                                .background(.white, in: RoundedRectangle(cornerRadius: 16))
                             }
                             .buttonStyle(.plain)
                         }
@@ -83,7 +84,7 @@ struct ChannelSearchView: View {
                 }
             }
         }
-        .background(Color.black.ignoresSafeArea())
+        .background(AppColors.brandNavy.ignoresSafeArea())
         .onAppear { searchFocused = true }
     }
 }

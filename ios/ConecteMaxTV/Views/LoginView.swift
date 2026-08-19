@@ -12,19 +12,13 @@ struct LoginView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Image(systemName: "lock.fill")
-                .font(.system(size: 34))
-                .foregroundStyle(.white)
-                .frame(width: 76, height: 76)
-                .background(AppColors.darkBackground, in: Circle())
-            Text("Conecte Max TV")
-                .font(.system(size: 26, weight: .bold))
-                .foregroundStyle(AppColors.darkBackground)
-                .padding(.top, 20)
+            BrandLogo()
+                .frame(width: 260, height: 146)
+                .clipShape(RoundedRectangle(cornerRadius: 24))
             Text("Entre com os dados da Central do Cliente")
                 .font(.system(size: 14))
                 .foregroundStyle(Color(hex: 0x6B7280))
-                .padding(.top, 6)
+                .padding(.top, 16)
 
             VStack(spacing: 14) {
                 TextField("CPF ou CNPJ", text: $document)
@@ -55,7 +49,7 @@ struct LoginView: View {
             if let message = session.loginMessage ?? (showsInitialMessage ? initialMessage : nil) {
                 Text(message)
                     .font(.system(size: 13))
-                    .foregroundStyle(.red)
+                    .foregroundStyle(Color(hex: 0xBA1A1A))
                     .multilineTextAlignment(.center)
                     .padding(.top, 12)
             }
@@ -77,7 +71,8 @@ struct LoginView: View {
         .frame(maxWidth: 440)
         .padding(.horizontal, 28)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(hex: 0xF3F5F8).ignoresSafeArea())
+        .background(Color(hex: 0xF0F6FC).ignoresSafeArea())
+        .tint(AppColors.brandBlue)
     }
 
     private func submit() {

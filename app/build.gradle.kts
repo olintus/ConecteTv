@@ -1,16 +1,31 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
 
+// Mantém os arquivos temporários do Gradle fora do OneDrive, que pode bloquear
+// arquivos DEX e impedir tarefas como clean, mergeResources e packageDebug.
+val localBuildRoot = System.getenv("LOCALAPPDATA")
+    ?: System.getProperty("java.io.tmpdir")
+layout.buildDirectory.set(file("$localBuildRoot/ConecteTV/gradle-build/app"))
+
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties().apply {
+    if (keystorePropertiesFile.exists()) {
+        keystorePropertiesFile.inputStream().use(::load)
+    }
+}
+
 android {
     namespace = "br.com.conectemax.tv"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "br.com.conectemax.tv"
         minSdk = 23
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
     }
@@ -30,6 +45,24 @@ android {
 
     kotlinOptions {
         jvmTarget = "17"
+    }
+
+    signingConfigs {
+        if (keystorePropertiesFile.exists()) {
+            create("release") {
+                storeFile = rootProject.file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+        }
+    }
+
+    buildTypes {
+        getByName("release") {
+            signingConfig = signingConfigs.findByName("release")
+            isMinifyEnabled = false
+        }
     }
 }
 

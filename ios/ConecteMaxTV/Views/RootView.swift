@@ -37,15 +37,9 @@ struct SessionStatusView<Actions: View>: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Image(systemName: "lock.fill")
-                .font(.system(size: 34))
-                .foregroundStyle(.white)
-                .frame(width: 76, height: 76)
-                .background(AppColors.darkBackground, in: Circle())
-            Text("Conecte Max TV")
-                .font(.system(size: 25, weight: .bold))
-                .foregroundStyle(AppColors.darkBackground)
-                .padding(.top, 20)
+            BrandLogo()
+                .frame(width: 250, height: 141)
+                .clipShape(RoundedRectangle(cornerRadius: 24))
             Text(message)
                 .font(.system(size: 14))
                 .foregroundStyle(Color(hex: 0x5B6472))
@@ -59,7 +53,7 @@ struct SessionStatusView<Actions: View>: View {
         }
         .padding(.horizontal, 32)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(hex: 0xF3F5F8).ignoresSafeArea())
+        .background(Color(hex: 0xF0F6FC).ignoresSafeArea())
     }
 }
 

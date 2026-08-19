@@ -3,6 +3,7 @@ import UIKit
 
 struct HomeView: View {
     @EnvironmentObject private var session: SessionViewModel
+    @StateObject private var playerModel = PlayerViewModel()
     let channels: [Channel]
     let profile: CustomerProfile
 
@@ -46,6 +47,7 @@ struct HomeView: View {
                 homeContent(selectedChannel)
             }
         }
+        .statusBarHidden(isFullscreen)
         .onDisappear { setFullscreen(false) }
     }
 
@@ -53,6 +55,7 @@ struct HomeView: View {
     private func homeContent(_ selectedChannel: Channel) -> some View {
         if isFullscreen {
             PlayerView(
+                model: playerModel,
                 streamURL: selectedChannel.streamURL,
                 backgroundPlaybackEnabled: backgroundPlaybackEnabled,
                 isFullscreen: true,
@@ -64,6 +67,7 @@ struct HomeView: View {
             VStack(spacing: 0) {
                 TopBar(onSearch: { isSearching = true })
                 PlayerView(
+                    model: playerModel,
                     streamURL: selectedChannel.streamURL,
                     backgroundPlaybackEnabled: backgroundPlaybackEnabled,
                     isFullscreen: false,
@@ -113,9 +117,11 @@ struct TopBar: View {
 
     var body: some View {
         ZStack {
-            Text("Conecte Max TV")
-                .font(.system(size: 20, weight: .bold))
-                .foregroundStyle(.white)
+            PlayerBrandLogo()
+                .padding(.horizontal, 2)
+                .frame(width: 152, height: 42)
+                .background(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
             HStack {
                 AirPlayButton().frame(width: 44, height: 44)
                 Spacer()
@@ -127,7 +133,7 @@ struct TopBar: View {
             }
             .padding(.horizontal, 8)
         }
-        .frame(height: 56)
+        .frame(height: 64)
         .background(AppColors.darkBackground)
         .background(AppColors.darkBackground.ignoresSafeArea(edges: .top))
     }
@@ -186,7 +192,7 @@ struct BottomBar: View {
             Button(action: onGrid) {
                 Image(systemName: "square.grid.2x2.fill").font(.system(size: 24))
                     .frame(width: 52, height: 52)
-                    .background(.white.opacity(0.12), in: Circle())
+                    .background(AppColors.brandOrange, in: Circle())
             }
             Spacer()
             Button(action: onMenu) {
@@ -226,7 +232,12 @@ struct ChannelLogo: View {
             if let url = channel.logoURL {
                 AsyncImage(url: url) { phase in
                     switch phase {
-                    case .success(let image): image.resizable().scaledToFit()
+                    case .success(let image):
+                        if circular {
+                            image.resizable().scaledToFill()
+                        } else {
+                            image.resizable().scaledToFit()
+                        }
                     case .failure: fallback
                     default: ProgressView().tint(AppColors.watching)
                     }

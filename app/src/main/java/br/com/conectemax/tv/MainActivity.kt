@@ -49,12 +49,9 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.ExitToApp
 import androidx.compose.material.icons.rounded.Cast
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Fullscreen
 import androidx.compose.material.icons.rounded.FullscreenExit
-import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.GridView
-import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.PlayCircle
@@ -285,7 +282,7 @@ private fun PlayerBrandLogo(modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(id = R.drawable.conecte_tv_player_logo),
         contentDescription = "Conecte TV",
-        contentScale = ContentScale.Fit,
+        contentScale = ContentScale.Crop,
         modifier = modifier,
     )
 }
@@ -1077,10 +1074,10 @@ fun TopBar(
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 PlayerBrandLogo(
                     modifier = Modifier
-                        .size(width = 104.dp, height = 54.dp)
+                        .size(width = 152.dp, height = 42.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .background(Color.White)
-                        .padding(2.dp),
+                        .padding(horizontal = 2.dp),
                 )
             }
         },
@@ -1191,7 +1188,7 @@ private fun ChannelSearchScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxWidth().weight(1f),
                 contentPadding = PaddingValues(start = 14.dp, end = 14.dp, bottom = 24.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
             ) {
                 items(filteredChannels, key = Channel::id) { channel ->
                     SearchChannelCard(channel = channel, onClick = { onChannelClick(channel) })
@@ -1210,11 +1207,11 @@ private fun SearchChannelCard(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(126.dp)
-            .clip(RoundedCornerShape(18.dp))
+            .height(104.dp)
+            .clip(RoundedCornerShape(16.dp))
             .background(Color.White)
             .clickable(onClick = onClick)
-            .padding(horizontal = 28.dp),
+            .padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         SubcomposeAsyncImage(
@@ -1240,14 +1237,14 @@ private fun SearchChannelCard(
                     )
                 }
             },
-            modifier = Modifier.size(width = 92.dp, height = 76.dp),
+            modifier = Modifier.size(width = 76.dp, height = 62.dp),
         )
         Text(
             text = channel.name,
             color = Color.Black,
-            fontSize = 23.sp,
+            fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(start = 28.dp),
+            modifier = Modifier.padding(start = 20.dp),
         )
     }
 }
@@ -1379,30 +1376,6 @@ private fun SettingsScreen(
                     onCheckedChange = onBackgroundPlaybackChange,
                 )
             }
-            SettingsRow(
-                icon = Icons.Rounded.Language,
-                label = "Idioma",
-                onClick = { /* A seleção de idiomas pode ser conectada aqui. */ },
-            ) {
-                Text(text = "Português", color = Color(0xFF6B7280), fontSize = 13.sp)
-                Icon(
-                    imageVector = Icons.Rounded.ChevronRight,
-                    contentDescription = null,
-                    tint = Color(0xFF333333),
-                )
-            }
-            SettingsRow(
-                icon = Icons.Rounded.Lock,
-                label = "Alterar senha do Controle Parental",
-                onClick = { /* Abrir a alteração do PIN parental. */ },
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.ChevronRight,
-                    contentDescription = null,
-                    tint = Color(0xFF333333),
-                )
-            }
-
             Spacer(modifier = Modifier.weight(1f))
             Row(
                 modifier = Modifier

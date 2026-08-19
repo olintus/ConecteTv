@@ -6,9 +6,9 @@
 
     <application
         android:allowBackup="false"
-        android:icon="@drawable/conecte_tv_launcher_icon"
+        android:icon="@mipmap/ic_launcher"
         android:label="Conecte TV"
-        android:roundIcon="@drawable/conecte_tv_launcher_icon"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ConecteMaxTV"
         android:usesCleartextTraffic="true">

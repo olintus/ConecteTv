@@ -42,6 +42,5 @@ enum AppConstants {
     static let centralContractsURL = URL(string: "https://sgp.conecteinternet.com.br/api/central/contratos")!
     static let requiredTVPlan = "Conecte TV"
     static let channelsPlaylistURL = URL(string: "http://138.0.212.26/hls/playlist.m3u")!
-    static let userAgent = "ConecteMaxTV-iOS/1.0"
+    static let userAgent = "ConecteMaxTV/1.0"
 }
-

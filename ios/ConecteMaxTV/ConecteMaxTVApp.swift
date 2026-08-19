@@ -10,6 +10,7 @@ struct ConecteMaxTVApp: App {
         WindowGroup {
             RootView()
                 .environmentObject(session)
+                .tint(AppColors.brandBlue)
                 .preferredColorScheme(.light)
         }
     }
@@ -25,4 +26,3 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         Self.orientationLock
     }
 }
-
